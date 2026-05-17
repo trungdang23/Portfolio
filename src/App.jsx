@@ -692,6 +692,7 @@ function ProjectsSection({ activeProject, setActiveProject, muted, threeLoaded, 
     const cardsArray = [];
     const videoElements = [];
 
+    // Helper: programmatically draw cyberpunk-grid wireframes on canvas texture
     const generateFallbackTexture = (title, category, colorHex) => {
       const canvas = document.createElement('canvas');
       canvas.width = 512;
@@ -796,6 +797,7 @@ function ProjectsSection({ activeProject, setActiveProject, muted, threeLoaded, 
     let currentRotation = 0;
     let targetRotation = 0;
     let isDragging = false;
+    let isHoveringAny = false;
     let previousMouseX = 0;
     let dragVelocity = 0;
     const dragFactor = 0.005;
@@ -816,6 +818,7 @@ function ProjectsSection({ activeProject, setActiveProject, muted, threeLoaded, 
 
         const intersects = raycaster.intersectObjects(carouselGroup.children, true);
 
+        let hoveredThisFrame = false;
         cardsArray.forEach((card) => {
           let parentCard = card;
           let isHovered = intersects.some(i => i.object.parent === parentCard || i.object === parentCard.children[0]);
@@ -826,7 +829,8 @@ function ProjectsSection({ activeProject, setActiveProject, muted, threeLoaded, 
             parentCard.userData.mesh.material.needsUpdate = true;
             parentCard.userData.subMesh.rotation.y += 0.05;
             parentCard.userData.subMesh.rotation.x += 0.02;
-            parentCard.userData.video.play().catch(() => { });
+            parentCard.userData.video.play().catch(() => {});
+            hoveredThisFrame = true;
           } else {
             parentCard.scale.set(1, 1, 1);
             parentCard.userData.mesh.material.map = parentCard.userData.fallbackTex;
@@ -834,6 +838,7 @@ function ProjectsSection({ activeProject, setActiveProject, muted, threeLoaded, 
             parentCard.userData.video.pause();
           }
         });
+        isHoveringAny = hoveredThisFrame;
         return;
       }
 
@@ -841,6 +846,16 @@ function ProjectsSection({ activeProject, setActiveProject, muted, threeLoaded, 
       targetRotation += deltaX * dragFactor;
       dragVelocity = deltaX * dragFactor;
       previousMouseX = e.clientX;
+    };
+
+    const handleMouseLeaveCanvas = () => {
+      isHoveringAny = false;
+      cardsArray.forEach((card) => {
+        card.scale.set(1, 1, 1);
+        card.userData.mesh.material.map = card.userData.fallbackTex;
+        card.userData.mesh.material.needsUpdate = true;
+        card.userData.video.pause();
+      });
     };
 
     const handleMouseUp = (e) => {
@@ -879,12 +894,14 @@ function ProjectsSection({ activeProject, setActiveProject, muted, threeLoaded, 
     };
 
     const handleWheel = (e) => {
+      // Chặn hành vi cuộn trang mặc định của trình duyệt khi lăn chuột trên 3D Canvas
       e.preventDefault();
       targetRotation += e.deltaY * 0.0012;
     };
 
     container.addEventListener('mousedown', handleMouseDown);
     container.addEventListener('mousemove', handleMouseMove);
+    container.addEventListener('mouseleave', handleMouseLeaveCanvas);
     window.addEventListener('mouseup', handleMouseUp);
     container.addEventListener('touchstart', handleTouchStart, { passive: true });
     container.addEventListener('touchmove', handleTouchMove, { passive: true });
@@ -904,6 +921,10 @@ function ProjectsSection({ activeProject, setActiveProject, muted, threeLoaded, 
       animationFrameId = requestAnimationFrame(animate);
 
       if (!isDragging) {
+        // Tự động xoay nhẹ khi không kéo và không di chuột vào thẻ
+        if (!isHoveringAny) {
+          targetRotation -= 0.0015;
+        }
         targetRotation += dragVelocity;
         dragVelocity *= 0.95;
       }
@@ -933,6 +954,7 @@ function ProjectsSection({ activeProject, setActiveProject, muted, threeLoaded, 
       cancelAnimationFrame(animationFrameId);
       container.removeEventListener('mousedown', handleMouseDown);
       container.removeEventListener('mousemove', handleMouseMove);
+      container.removeEventListener('mouseleave', handleMouseLeaveCanvas);
       window.removeEventListener('mouseup', handleMouseUp);
       container.removeEventListener('touchstart', handleTouchStart);
       container.removeEventListener('touchmove', handleTouchMove);
@@ -979,10 +1001,6 @@ function ProjectsSection({ activeProject, setActiveProject, muted, threeLoaded, 
 
           <div ref={carouselContainerRef} className="w-full h-full cursor-grab active:cursor-grabbing z-20"></div>
 
-          <div className="absolute top-4 left-4 z-30 flex items-center gap-2 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded border border-slate-800">
-            <MousePointer className="w-3 h-3 text-[#00f0ff] animate-pulse" />
-            <span className="font-mono text-[9px] text-slate-300 uppercase tracking-widest">INTERACTION: HORIZONTAL SWIPE / SCROLL</span>
-          </div>
         </div>
 
         <div className="max-w-md mx-auto grid grid-cols-4 gap-2 font-mono text-[10px]">
