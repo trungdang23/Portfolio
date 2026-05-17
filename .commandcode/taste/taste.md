@@ -1,4 +1,3 @@
-# Taste (Continuously Learned by [CommandCode][cmd])
-
-[cmd]: https://commandcode.ai/
+# workflow
+- Keep all UI text and content in English, do not translate to Vietnamese. Confidence: 0.70
 
