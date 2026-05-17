@@ -219,9 +219,12 @@ function HeroSection({ threeLoaded }) {
     const THREE = window.THREE;
     const container = containerRef.current;
 
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+    const particleCount = isMobile ? 800 : 1500;
+
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
-    camera.position.z = 5;
+    camera.position.set(0, 0, 5);
 
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setSize(container.clientWidth, container.clientHeight);
@@ -229,23 +232,20 @@ function HeroSection({ threeLoaded }) {
     container.appendChild(renderer.domElement);
 
     const geometry = new THREE.BufferGeometry();
-    const isMobile = window.matchMedia("(max-width: 768px)").matches;
-    const particleCount = isMobile ? 800 : 1500;
-
     const positions = new Float32Array(particleCount * 3);
     const colors = new Float32Array(particleCount * 3);
 
     for (let i = 0; i < particleCount * 3; i += 3) {
       positions[i] = (Math.random() - 0.5) * 12;
-      positions[i + 1] = (Math.random() - 0.5) * 12;
-      positions[i + 2] = (Math.random() - 0.5) * 12;
+      positions[i+1] = (Math.random() - 0.5) * 12;
+      positions[i+2] = (Math.random() - 0.5) * 12;
 
       const mixedColor = new THREE.Color();
       const pct = Math.random();
       mixedColor.lerpColors(new THREE.Color("#00f0ff"), new THREE.Color("#bd00ff"), pct);
       colors[i] = mixedColor.r;
-      colors[i + 1] = mixedColor.g;
-      colors[i + 2] = mixedColor.b;
+      colors[i+1] = mixedColor.g;
+      colors[i+2] = mixedColor.b;
     }
 
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
@@ -263,7 +263,7 @@ function HeroSection({ threeLoaded }) {
     const particles = new THREE.Points(geometry, material);
     scene.add(particles);
 
-    const gridHelper = new THREE.GridHelper(30, 30, 0xbd00ff, 0x121217);
+    const gridHelper = new THREE.GridHelper(30, 30, "#bd00ff", "#121217");
     gridHelper.position.y = -3;
     gridHelper.material.opacity = 0.25;
     gridHelper.material.transparent = true;
@@ -322,22 +322,20 @@ function HeroSection({ threeLoaded }) {
 
   return (
     <section id="hero" className="relative min-h-screen flex items-center justify-center pt-24 pb-12 px-6 overflow-hidden">
+      {/* Dynamic Star Particle Field (Background) */}
       <div ref={containerRef} className="absolute inset-0 w-full h-full z-0 pointer-events-none"></div>
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#0a0a0c] z-10 pointer-events-none"></div>
 
-      <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 relative z-30">
-        <div className="lg:col-span-8 flex flex-col justify-center space-y-6 text-left">
+      {/* Interface Overlay (High z-index, pointer events filtered to allow 3D dragging through empty gaps) */}
+      <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 relative z-20 items-center pointer-events-none">
 
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#00f0ff]/10 border border-[#00f0ff]/30 text-[#00f0ff] font-mono text-xs w-fit tracking-widest animate-pulse">
-            <Zap className="w-3 h-3" />
-            <span>OPERATIONAL // FREELANCE WEB & VIDEO STUDIO</span>
-          </div>
+        <div className="lg:col-span-7 flex flex-col justify-center space-y-6 text-left pointer-events-auto">
 
-          <h1 className="text-4xl sm:text-6xl lg:text-8xl font-black uppercase tracking-tight leading-none text-white font-sans">
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl xl:text-8xl font-black uppercase tracking-tight leading-none text-white">
             CRAFTING <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00f0ff] via-[#bd00ff] to-[#ff00a0]">DIMENSIONAL</span> NARRATIVES
           </h1>
 
-          <p className="text-slate-400 text-lg sm:text-xl max-w-xl font-sans font-light">
+          <p className="text-slate-400 text-lg sm:text-xl max-w-xl font-light">
             Expert Video Editor & 3D Designer weaving cinematic footage, generative graphics, and high-performance WebGL to accelerate conversions for global tier-one brands.
           </p>
 
@@ -358,8 +356,246 @@ function HeroSection({ threeLoaded }) {
 
         </div>
 
+        {/* Dummy Spacer Grid column for clean desktop alignment */}
+        <div className="lg:col-span-5 w-full h-[450px] lg:h-auto pointer-events-none"></div>
+
+      </div>
+
+      {/* Massive 3D Canvas Area (Now fully absolute screen-wide, layout clips boundaries internally) */}
+      <div className="absolute inset-0 w-full h-full z-10 pointer-events-auto">
+        <SpaceshipEarthScene threeLoaded={threeLoaded} />
       </div>
     </section>
+  );
+}
+
+function SpaceshipEarthScene({ threeLoaded }) {
+  const mountRef = useRef(null);
+
+  useEffect(() => {
+    if (!threeLoaded || !mountRef.current || !window.THREE) return;
+
+    const THREE = window.THREE;
+    const container = mountRef.current;
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 100);
+    camera.position.set(0, 0, 5.5);
+
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    container.appendChild(renderer.domElement);
+
+    const interactionGroup = new THREE.Group();
+    scene.add(interactionGroup);
+
+    // Dynamic initial offset: shifts right on desktop, shifts down on mobile to prevent blocking text
+    const isInitialMobile = window.innerWidth < 1024;
+    interactionGroup.position.set(isInitialMobile ? 0 : 1.3, isInitialMobile ? -1.0 : 0, 0);
+
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+    scene.add(ambientLight);
+
+    const directionalLight = new THREE.DirectionalLight(0x00f0ff, 1.5);
+    directionalLight.position.set(5, 5, 5);
+    scene.add(directionalLight);
+
+    const pointLight = new THREE.PointLight(0xff00a0, 2, 8);
+    pointLight.position.set(-3, -2, 2);
+    scene.add(pointLight);
+
+    const earthGroup = new THREE.Group();
+    earthGroup.rotation.z = 0.41;
+    interactionGroup.add(earthGroup);
+
+    const earthGeo = new THREE.IcosahedronGeometry(1.2, 2);
+    const earthMat = new THREE.MeshBasicMaterial({
+      color: 0x00f0ff,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.35,
+      blending: THREE.AdditiveBlending
+    });
+    const earthMesh = new THREE.Mesh(earthGeo, earthMat);
+    earthGroup.add(earthMesh);
+
+    const innerEarthGeo = new THREE.SphereGeometry(0.8, 8, 8);
+    const innerEarthMat = new THREE.MeshBasicMaterial({
+      color: 0xbd00ff,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.12,
+      blending: THREE.AdditiveBlending
+    });
+    const innerEarthMesh = new THREE.Mesh(innerEarthGeo, innerEarthMat);
+    earthGroup.add(innerEarthMesh);
+
+    const orbitRadius = 2.0;
+    const orbitTilt = 0.35;
+    const orbitPoints = [];
+    for (let i = 0; i <= 64; i++) {
+      const theta = (i / 64) * Math.PI * 2;
+      orbitPoints.push(new THREE.Vector3(
+        Math.cos(theta) * orbitRadius,
+        Math.sin(theta) * orbitRadius * Math.sin(orbitTilt),
+        Math.sin(theta) * orbitRadius * Math.cos(orbitTilt)
+      ));
+    }
+    const orbitGeo = new THREE.BufferGeometry().setFromPoints(orbitPoints);
+    const orbitMat = new THREE.LineBasicMaterial({
+      color: 0xbd00ff,
+      transparent: true,
+      opacity: 0.15
+    });
+    const orbitLine = new THREE.Line(orbitGeo, orbitMat);
+    interactionGroup.add(orbitLine);
+
+    const shipGroup = new THREE.Group();
+    interactionGroup.add(shipGroup);
+
+    const procShipGroup = new THREE.Group();
+
+    const noseGeo = new THREE.ConeGeometry(0.08, 0.28, 4);
+    noseGeo.rotateX(Math.PI / 2);
+    const noseMat = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true });
+    const noseMesh = new THREE.Mesh(noseGeo, noseMat);
+    procShipGroup.add(noseMesh);
+
+    const wingLeftGeo = new THREE.ConeGeometry(0.04, 0.18, 3);
+    wingLeftGeo.rotateZ(-Math.PI / 2.2);
+    const wingLeftMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff, wireframe: true });
+    const wingLeft = new THREE.Mesh(wingLeftGeo, wingLeftMat);
+    wingLeft.position.set(-0.14, 0, -0.06);
+    procShipGroup.add(wingLeft);
+
+    const wingRightGeo = new THREE.ConeGeometry(0.04, 0.18, 3);
+    wingRightGeo.rotateZ(Math.PI / 2.2);
+    const wingRightMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff, wireframe: true });
+    const wingRight = new THREE.Mesh(wingRightGeo, wingRightMat);
+    wingRight.position.set(0.14, 0, -0.06);
+    procShipGroup.add(wingRight);
+
+    const fireGeo = new THREE.ConeGeometry(0.025, 0.12, 4);
+    fireGeo.rotateX(-Math.PI / 2);
+    const fireMat = new THREE.MeshBasicMaterial({
+      color: 0xff00a0,
+      transparent: true,
+      opacity: 0.85,
+      blending: THREE.AdditiveBlending
+    });
+    const fireMesh = new THREE.Mesh(fireGeo, fireMat);
+    fireMesh.position.set(0, 0, -0.18);
+    procShipGroup.add(fireMesh);
+
+    shipGroup.add(procShipGroup);
+
+    let isDragging = false;
+    let previousMousePosition = { x: 0, y: 0 };
+    let targetRotationX = 0.1;
+    let targetRotationY = -0.3;
+
+    const handleMouseDown = (e) => {
+      isDragging = true;
+      previousMousePosition = { x: e.offsetX, y: e.offsetY };
+    };
+
+    const handleMouseMove = (e) => {
+      if (isDragging) {
+        const deltaX = e.offsetX - previousMousePosition.x;
+        const deltaY = e.offsetY - previousMousePosition.y;
+
+        targetRotationY += deltaX * 0.007;
+        targetRotationX += deltaY * 0.007;
+      }
+      previousMousePosition = { x: e.offsetX, y: e.offsetY };
+    };
+
+    const handleMouseUp = () => { isDragging = false; };
+
+    container.addEventListener('mousedown', handleMouseDown);
+    container.addEventListener('mousemove', handleMouseMove);
+    container.addEventListener('mouseup', handleMouseUp);
+    container.addEventListener('mouseleave', handleMouseUp);
+
+    const handleResize = () => {
+      if (!container.clientWidth || !container.clientHeight) return;
+      camera.aspect = container.clientWidth / container.clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(container.clientWidth, container.clientHeight);
+
+      // Dynamically reposition the planetary group upon screen resizing
+      const isMobile = window.innerWidth < 1024;
+      interactionGroup.position.set(isMobile ? 0 : 1.3, isMobile ? -1.0 : 0, 0);
+    };
+    window.addEventListener('resize', handleResize);
+
+    let clock = new THREE.Clock();
+    let animationFrameId;
+
+    const animate = () => {
+      animationFrameId = requestAnimationFrame(animate);
+      const elapsedTime = clock.getElapsedTime();
+
+      earthMesh.rotation.y = elapsedTime * 0.12;
+      innerEarthMesh.rotation.y = -elapsedTime * 0.18;
+
+      const flightSpeed = 0.6;
+      const t = elapsedTime * flightSpeed;
+      const x = Math.cos(t) * orbitRadius;
+      const z = Math.sin(t) * orbitRadius * Math.cos(orbitTilt);
+      const y = Math.sin(t) * orbitRadius * Math.sin(orbitTilt);
+
+      shipGroup.position.set(x, y, z);
+
+      const nextT = t + 0.01;
+      const nextX = Math.cos(nextT) * orbitRadius;
+      const nextZ = Math.sin(nextT) * orbitRadius * Math.cos(orbitTilt);
+      const nextY = Math.sin(nextT) * orbitRadius * Math.sin(orbitTilt);
+      shipGroup.lookAt(new THREE.Vector3(nextX, nextY, nextZ));
+
+      fireMesh.scale.z = 0.85 + Math.sin(elapsedTime * 35) * 0.25;
+
+      interactionGroup.rotation.y += (targetRotationY - interactionGroup.rotation.y) * 0.1;
+      interactionGroup.rotation.x += (targetRotationX - interactionGroup.rotation.x) * 0.1;
+
+      renderer.render(scene, camera);
+    };
+    animate();
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+      container.removeEventListener('mousedown', handleMouseDown);
+      container.removeEventListener('mousemove', handleMouseMove);
+      container.removeEventListener('mouseup', handleMouseUp);
+      container.removeEventListener('mouseleave', handleMouseUp);
+      window.removeEventListener('resize', handleResize);
+
+      if (container.contains(renderer.domElement)) {
+        container.removeChild(renderer.domElement);
+      }
+
+      earthGeo.dispose();
+      earthMat.dispose();
+      innerEarthGeo.dispose();
+      innerEarthMat.dispose();
+      orbitGeo.dispose();
+      orbitMat.dispose();
+      noseGeo.dispose();
+      noseMat.dispose();
+      wingLeftGeo.dispose();
+      wingLeftMat.dispose();
+      wingRightGeo.dispose();
+      wingRightMat.dispose();
+      fireGeo.dispose();
+      fireMat.dispose();
+    };
+  }, [threeLoaded]);
+
+  return (
+    <div className="w-full h-full relative bg-transparent">
+      <div ref={mountRef} className="w-full h-full cursor-grab active:cursor-grabbing"></div>
+    </div>
   );
 }
 
