@@ -1073,6 +1073,7 @@ function ProjectsSection({ activeProject, setActiveProject, threeLoaded, carouse
 
     const handleMouseLeaveCanvas = () => {
       isHoveringAny = false;
+      pointerDown = false;
       cardsArray.forEach((card) => {
         card.scale.set(1, 1, 1);
         card.userData.mesh.material.map = card.userData.fallbackTex;
@@ -1083,6 +1084,9 @@ function ProjectsSection({ activeProject, setActiveProject, threeLoaded, carouse
 
     const handleMouseUp = (e) => {
       isDragging = false;
+      if (!pointerDown) return;
+      pointerDown = false;
+
       const rect = container.getBoundingClientRect();
       const mouseX = ((e.clientX - rect.left) / container.clientWidth) * 2 - 1;
       const mouseY = -((e.clientY - rect.top) / container.clientHeight) * 2 + 1;
@@ -1250,12 +1254,32 @@ function ProjectsSection({ activeProject, setActiveProject, threeLoaded, carouse
 }
 
 function SkillsSection({ hoveredSkill, setHoveredSkill }) {
-  const skillsList = [
-    { name: "Video Editing", score: 95, color: "#00f0ff", desc: "Expert speed ramps, creative dynamic overlays, heavy color grading & sound pacing." },
-    { name: "3D Modeling", score: 88, color: "#bd00ff", desc: "Procedural procedural assets, volumetric modeling, lighting architecture & particle flows." },
-    { name: "Motion Graphics", score: 92, color: "#ff00a0", desc: "Expressive neon typographies, functional interface elements & reactive dynamic visualizers." },
-    { name: "VFX", score: 85, color: "#00ff66", desc: "Camera tracking, green screen tracking, volumetric lighting & structural destruction assets." }
+  const skills = [
+    { name: "Video Editing", score: 95, color: "#00f0ff", angle: 0 },
+    { name: "3D Modeling", score: 88, color: "#bd00ff", angle: 90 },
+    { name: "Motion Graphics", score: 90, color: "#ff00a0", angle: 180 },
+    { name: "VFX Production", score: 85, color: "#00ff66", angle: 270 }
   ];
+
+  const polarToCartesian = (centerX, centerY, radius, angleInDegrees) => {
+    const angleInRadians = ((angleInDegrees - 90) * Math.PI) / 180.0;
+    return {
+      x: centerX + radius * Math.cos(angleInRadians),
+      y: centerY + radius * Math.sin(angleInRadians)
+    };
+  };
+
+  const getPointsPath = (center, maxRadius) => {
+    const coords = skills.map((sk) => {
+      const radius = (sk.score / 100) * maxRadius;
+      return polarToCartesian(center, center, radius, sk.angle);
+    });
+    return `M ${coords[0].x} ${coords[0].y} L ${coords[1].x} ${coords[1].y} L ${coords[2].x} ${coords[2].y} L ${coords[3].x} ${coords[3].y} Z`;
+  };
+
+  const center = 160;
+  const maxRadius = 110;
+  const pathData = getPointsPath(center, maxRadius);
 
   return (
     <section id="skills" className="relative py-24 px-6 bg-[#070709] border-t border-b border-[#00f0ff]/5 overflow-hidden">
@@ -1265,105 +1289,106 @@ function SkillsSection({ hoveredSkill, setHoveredSkill }) {
 
         <div className="lg:col-span-6 space-y-6">
           <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tight text-white leading-none">
-            CAPABILITY MATRIX
+            TECHNICAL CAPABILITIES MATRIX
           </h2>
           <p className="text-slate-400 font-sans text-sm leading-relaxed">
-            A comprehensive overview mapping out my technological disciplines. Select an axis on the live holographic chart to inspect active terminal metrics and structural software tags.
+            Spider diagram displaying the balance of my technical skills. Hover over each skill node on the radar chart or the list items to view detailed breakdowns.
           </p>
 
-          <div className="p-[1px] bg-gradient-to-r from-slate-800 to-slate-900 rounded">
-            <div className="bg-[#0a0a0c] p-6 rounded space-y-3 min-h-[160px] flex flex-col justify-center">
-              {hoveredSkill ? (
-                <div>
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="w-3 h-3 rounded-full" style={{ backgroundColor: hoveredSkill.color }}></span>
-                    <span className="font-mono text-sm tracking-widest font-bold text-white uppercase">{hoveredSkill.name}</span>
-                  </div>
-                  <p className="text-slate-300 text-xs font-sans leading-relaxed">{hoveredSkill.desc}</p>
+          <div className="grid grid-cols-2 gap-3 pt-4">
+            {skills.map((sk) => (
+              <div
+                key={sk.name}
+                onMouseEnter={() => setHoveredSkill(sk.name)}
+                onMouseLeave={() => setHoveredSkill(null)}
+                className={`p-4 rounded-lg border transition-all duration-300 flex flex-col justify-between cursor-crosshair ${hoveredSkill === sk.name ? 'border-[#00f0ff] bg-[#00f0ff]/5' : 'border-slate-900 bg-[#0e0e13]/50'}`}
+              >
+                <div className="flex items-center gap-3 mb-2">
+                  <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: sk.color }}></span>
+                  <span className="font-mono text-xs uppercase tracking-widest font-bold text-slate-200">{sk.name}</span>
                 </div>
-              ) : (
-                <div className="text-center py-6">
-                  <span className="font-mono text-xs text-slate-500 uppercase tracking-widest animate-pulse">HOVER THE RADAR NODES TO INITIATE INTENSITY FEEDBACK</span>
+                <div className="font-mono text-[10px] font-bold" style={{ color: sk.color }}>
+                  OPERATIONAL
                 </div>
-              )}
-            </div>
+              </div>
+            ))}
           </div>
         </div>
 
-        <div className="lg:col-span-6 flex justify-center">
-          <div className="relative w-full max-w-[380px] aspect-square flex items-center justify-center">
+        <div className="lg:col-span-6 flex justify-center items-center">
+          <div className="w-[340px] h-[340px] border border-slate-900 bg-[#0a0a0c]/80 rounded-2xl p-4 relative flex items-center justify-center shadow-xl shadow-black">
 
-            <div className="absolute inset-0 border border-dashed border-[#00f0ff]/15 rounded-full animate-spin" style={{ animationDuration: '40s' }}></div>
-            <div className="absolute inset-8 border border-slate-800 rounded-full animate-spin" style={{ animationDuration: '20s', animationDirection: 'reverse' }}></div>
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(189,0,255,0.03)_0%,transparent_70%)] pointer-events-none"></div>
 
-            <svg viewBox="0 0 100 100" className="w-full h-full z-10 transform -rotate-45">
+            <svg width="100%" height="100%" viewBox="0 0 320 320" className="overflow-visible">
+              <circle cx={center} cy={center} r={maxRadius} fill="none" stroke="#12121c" strokeWidth="1" />
+              <circle cx={center} cy={center} r={maxRadius * 0.75} fill="none" stroke="#12121c" strokeWidth="1" strokeDasharray="4 4" />
+              <circle cx={center} cy={center} r={maxRadius * 0.5} fill="none" stroke="#12121c" strokeWidth="1" />
+              <circle cx={center} cy={center} r={maxRadius * 0.25} fill="none" stroke="#12121c" strokeWidth="1" strokeDasharray="4 4" />
 
-              <circle cx="50" cy="50" r="40" fill="none" stroke="#ffffff" strokeOpacity="0.03" strokeWidth="0.5" />
-              <circle cx="50" cy="50" r="30" fill="none" stroke="#ffffff" strokeOpacity="0.03" strokeWidth="0.5" />
-              <circle cx="50" cy="50" r="20" fill="none" stroke="#ffffff" strokeOpacity="0.03" strokeWidth="0.5" />
-              <circle cx="50" cy="50" r="10" fill="none" stroke="#ffffff" strokeOpacity="0.03" strokeWidth="0.5" />
+              <line x1={center} y1={center - maxRadius} x2={center} y2={center + maxRadius} stroke="#12121c" strokeWidth="1" />
+              <line x1={center - maxRadius} y1={center} x2={center + maxRadius} y2={center} stroke="#12121c" strokeWidth="1" />
 
-              <line x1="50" y1="10" x2="50" y2="90" stroke="#00f0ff" strokeOpacity="0.1" strokeWidth="0.5" />
-              <line x1="10" y1="50" x2="90" y2="50" stroke="#00f0ff" strokeOpacity="0.1" strokeWidth="0.5" />
-
-              <polygon
-                points={`
-                  50,${50 - (skillsList[0].score * 0.4)}
-                  ${50 + (skillsList[1].score * 0.4)},50
-                  50,${50 + (skillsList[2].score * 0.4)}
-                  ${50 - (skillsList[3].score * 0.4)},50
-                `}
-                fill="url(#radar-grad)"
+              <path
+                d={pathData}
+                fill="rgba(0, 240, 255, 0.08)"
                 stroke="#00f0ff"
-                strokeWidth="1"
-                className="transition-all duration-500 ease-out"
+                strokeWidth="2.5"
+                className="transition-all duration-500 hover:fill-rgba(189,0,255,0.15)"
               />
 
-              <circle
-                cx="50"
-                cy={50 - (skillsList[0].score * 0.4)}
-                r="2.5"
-                fill="#00f0ff"
-                className="cursor-pointer hover:scale-125 transition-all duration-300"
-                onMouseEnter={() => setHoveredSkill(skillsList[0])}
-              />
-              <circle
-                cx={50 + (skillsList[1].score * 0.4)}
-                cy="50"
-                r="2.5"
-                fill="#bd00ff"
-                className="cursor-pointer hover:scale-125 transition-all duration-300"
-                onMouseEnter={() => setHoveredSkill(skillsList[1])}
-              />
-              <circle
-                cx="50"
-                cy={50 + (skillsList[2].score * 0.4)}
-                r="2.5"
-                fill="#ff00a0"
-                className="cursor-pointer hover:scale-125 transition-all duration-300"
-                onMouseEnter={() => setHoveredSkill(skillsList[2])}
-              />
-              <circle
-                cx={50 - (skillsList[3].score * 0.4)}
-                cy="50"
-                r="2.5"
-                fill="#00ff66"
-                className="cursor-pointer hover:scale-125 transition-all duration-300"
-                onMouseEnter={() => setHoveredSkill(skillsList[3])}
-              />
+              {skills.map((sk) => {
+                const radius = (sk.score / 100) * maxRadius;
+                const pos = polarToCartesian(center, center, radius, sk.angle);
+                const isHovered = hoveredSkill === sk.name;
+                return (
+                  <g key={sk.name}>
+                    <circle
+                      cx={pos.x}
+                      cy={pos.y}
+                      r={isHovered ? 8 : 5}
+                      fill="#0a0a0c"
+                      stroke={sk.color}
+                      strokeWidth="2.5"
+                      className="transition-all duration-300 cursor-pointer"
+                      onMouseEnter={() => setHoveredSkill(sk.name)}
+                      onMouseLeave={() => setHoveredSkill(null)}
+                    />
+                    {isHovered && (
+                      <circle
+                        cx={pos.x}
+                        cy={pos.y}
+                        r="14"
+                        fill="none"
+                        stroke={sk.color}
+                        strokeWidth="1"
+                        className="animate-ping"
+                      />
+                    )}
+                  </g>
+                );
+              })}
 
-              <defs>
-                <linearGradient id="radar-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#00f0ff" stopOpacity="0.35" />
-                  <stop offset="100%" stopColor="#bd00ff" stopOpacity="0.35" />
-                </linearGradient>
-              </defs>
+              {skills.map((sk) => {
+                const textPos = polarToCartesian(center, center, maxRadius + 22, sk.angle);
+                const isHovered = hoveredSkill === sk.name;
+                return (
+                  <text
+                    key={sk.name}
+                    x={textPos.x}
+                    y={textPos.y}
+                    textAnchor="middle"
+                    dominantBaseline="central"
+                    className="font-mono text-[9px] uppercase tracking-wider font-bold transition-colors duration-300 cursor-pointer"
+                    fill={isHovered ? sk.color : "#64748b"}
+                    onMouseEnter={() => setHoveredSkill(sk.name)}
+                    onMouseLeave={() => setHoveredSkill(null)}
+                  >
+                    {sk.name.split(' ')[0]}
+                  </text>
+                );
+              })}
             </svg>
-
-            <span className="absolute top-1/2 left-2 -translate-y-1/2 font-mono text-[9px] text-[#00ff66] tracking-widest font-bold">VFX</span>
-            <span className="absolute top-1/2 right-2 -translate-y-1/2 font-mono text-[9px] text-[#bd00ff] tracking-widest font-bold">MODELING</span>
-            <span className="absolute top-2 left-1/2 -translate-x-1/2 font-mono text-[9px] text-[#00f0ff] tracking-widest font-bold">EDITING</span>
-            <span className="absolute bottom-2 left-1/2 -translate-x-1/2 font-mono text-[9px] text-[#ff00a0] tracking-widest font-bold">MOTION</span>
           </div>
         </div>
 
@@ -1390,78 +1415,87 @@ function ContactSection({ formStatus, setFormStatus }) {
     <section id="contact" className="relative py-24 px-6 bg-[#0a0a0c] overflow-hidden">
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#00f0ff]/5 rounded-full blur-[120px] pointer-events-none"></div>
 
-      <div className="max-w-4xl mx-auto border border-[#00f0ff]/15 rounded-xl bg-[#0e0e13]/80 backdrop-blur-xl relative overflow-hidden">
+      <div className="max-w-4xl mx-auto border border-[#00f0ff]/15 bg-[#0e0e13]/60 backdrop-blur-md rounded-2xl relative overflow-hidden">
 
-        <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-[#00f0ff] via-[#bd00ff] to-[#00f0ff] pointer-events-none"></div>
+        <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#00f0ff]/40 to-transparent"></div>
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.15)_50%)] bg-[length:100%_4px] pointer-events-none"></div>
 
-        <div className="p-8 sm:p-12 space-y-8">
+        <div className="grid grid-cols-1 md:grid-cols-12">
 
-          <div className="text-center space-y-2">
-            <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tight text-white">INITIATE CONNECTION</h2>
-            <p className="text-slate-400 font-sans text-sm max-w-md mx-auto">
-              Ready to construct cinematic, volumetric assets for your brands? Transmit your metrics below.
-            </p>
+          <div className="md:col-span-5 p-8 border-b md:border-b-0 md:border-r border-slate-900 flex flex-col justify-between space-y-8 font-mono">
+            <div className="space-y-4">
+                            <h3 className="text-2xl font-black tracking-tighter text-white">INITIATE TRANSACTION</h3>
+                          </div>
+
+            <div className="space-y-3 text-[11px] text-slate-400">
+              <div>
+                <span className="text-slate-500 block uppercase font-bold">CONTACT SUBJECT</span>
+                <span className="text-white">TRUNG DANG</span>
+              </div>
+              <div>
+                <span className="text-slate-500 block uppercase font-bold">DIRECT INBOX</span>
+                <span className="text-[#bd00ff] block font-bold hover:underline transition-all">trung.dang.cv@gmail.com</span>
+              </div>
+            </div>
           </div>
 
-          {formStatus.submitted ? (
-            <div className="bg-[#00ff66]/10 border border-[#00ff66]/40 p-6 rounded-lg flex flex-col items-center text-center space-y-3">
-              <CheckCircle className="w-12 h-12 text-[#00ff66] animate-bounce" />
-              <span className="font-mono text-xs tracking-widest text-[#00ff66] uppercase font-bold">TRANSMISSION ENCRYPTED & LOGGED</span>
-              <p className="text-slate-300 text-sm max-w-sm">{formStatus.message}</p>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="space-y-6 font-mono text-xs">
+          <div className="md:col-span-7 p-8">
+            <form onSubmit={handleSubmit} className="space-y-5">
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="text-slate-400 tracking-widest uppercase block">AGENT IDENTITY (NAME)</label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="E.g. ALICE SMITH"
-                    className="w-full bg-[#070709] border border-slate-800 rounded p-4 text-white focus:outline-none focus:border-[#00f0ff] transition-all duration-300"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-slate-400 tracking-widest uppercase block">COMM CHANNELS (EMAIL)</label>
-                  <input
-                    type="email"
-                    required
-                    placeholder="E.g. ALICE@AGENCY.COM"
-                    className="w-full bg-[#070709] border border-slate-800 rounded p-4 text-white focus:outline-none focus:border-[#00f0ff] transition-all duration-300"
-                  />
-                </div>
+              <div>
+                <label className="block font-mono text-[9px] uppercase tracking-widest text-slate-500 mb-1.5 font-bold">PARTNER / CLIENT NAME</label>
+                <input
+                  type="text"
+                  name="name"
+                  required
+                  placeholder="e.g. Aura Group Media"
+                  className="w-full bg-[#070709] border border-slate-800 focus:border-[#00f0ff] rounded p-3 text-xs tracking-wider outline-none text-slate-100 placeholder:text-slate-700 transition-all font-mono"
+                />
               </div>
 
-              <div className="space-y-2">
-                <label className="text-slate-400 tracking-widest uppercase block">OPERATION DETAILS (PROJECT BRIEF)</label>
+              <div>
+                <label className="block font-mono text-[9px] uppercase tracking-widest text-slate-500 mb-1.5 font-bold">CONTACT LINE (EMAIL)</label>
+                <input
+                  type="email"
+                  name="email"
+                  required
+                  placeholder="client@aura-group.com"
+                  className="w-full bg-[#070709] border border-slate-800 focus:border-[#00f0ff] rounded p-3 text-xs tracking-wider outline-none text-slate-100 placeholder:text-slate-700 transition-all font-mono"
+                />
+              </div>
+
+              <div>
+                <label className="block font-mono text-[9px] uppercase tracking-widest text-slate-500 mb-1.5 font-bold">TRANSMITTED MESSAGE</label>
                 <textarea
+                  name="message"
                   rows="4"
                   required
-                  placeholder="SPECIFY COMPREHENSIVE NARRATIVE & RENDERING BUDGET PARAMETERS..."
-                  className="w-full bg-[#070709] border border-slate-800 rounded p-4 text-white focus:outline-none focus:border-[#00f0ff] transition-all duration-300 resize-none"
-                ></textarea>
+                  placeholder="Script concept details, 3D project scope, or specific video editing requirements..."
+                  className="w-full bg-[#070709] border border-slate-800 focus:border-[#00f0ff] rounded p-3 text-xs tracking-wider outline-none text-slate-100 placeholder:text-slate-700 transition-all font-mono resize-none"
+                />
               </div>
 
               <button
                 type="submit"
                 disabled={formStatus.loading}
-                className="w-full py-4 bg-[#00f0ff] hover:bg-[#bd00ff] text-black hover:text-white font-black uppercase tracking-widest text-xs rounded transition-all duration-500 shadow-md flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                className="w-full py-4 bg-[#00f0ff]/10 hover:bg-[#00f0ff] hover:text-black border border-[#00f0ff]/40 hover:border-[#00f0ff] text-xs font-mono tracking-widest uppercase font-bold rounded transition-all duration-300 flex items-center justify-center gap-2 group cursor-pointer disabled:opacity-50"
               >
-                {formStatus.loading ? (
-                  <span>TRANSMITTING BUNDLE...</span>
-                ) : (
-                  <>
-                    <span>TRANSMIT METRICS</span>
-                    <Send className="w-4 h-4" />
-                  </>
-                )}
+                <span>{formStatus.loading ? "TRANSMITTING..." : "TRANSMIT DATA PACKET"}</span>
+                <Send className="w-3.5 h-3.5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
               </button>
 
+              {formStatus.message && (
+                <div className={`p-4 border rounded font-mono text-[10px] flex items-center gap-3 ${formStatus.message.includes('ERROR') ? 'border-amber-500/20 bg-amber-500/5 text-amber-500' : 'border-[#00f0ff]/20 bg-[#00f0ff]/5 text-[#00f0ff]'}`}>
+                  <CheckCircle className="w-4 h-4 shrink-0" />
+                  <span>{formStatus.message}</span>
+                </div>
+              )}
+
             </form>
-          )}
+          </div>
 
         </div>
+
       </div>
     </section>
   );
