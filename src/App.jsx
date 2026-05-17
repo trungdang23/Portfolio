@@ -110,16 +110,16 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
           <a href="#hero" className="flex items-center gap-3 group">
             <div className="w-10 h-10 border border-[#00f0ff]/50 rounded-lg flex items-center justify-center relative overflow-hidden group-hover:border-[#bd00ff] transition-all duration-500">
-              <span className="text-sm font-black tracking-tighter text-[#00f0ff] group-hover:text-[#bd00ff] transition-colors">TD</span>
+              <span className="text-base font-black tracking-tighter text-[#00f0ff] group-hover:text-[#bd00ff] transition-colors">TD</span>
               <div className="absolute inset-0 bg-gradient-to-tr from-[#00f0ff]/10 to-[#bd00ff]/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
             </div>
             <div>
-              <span className="font-mono text-sm tracking-widest font-bold block uppercase text-[#00f0ff]">TRUNG DANG</span>
-              <span className="text-[10px] font-mono tracking-widest text-slate-400 block -mt-1">PORTFOLIO</span>
+              <span className="font-mono text-base tracking-widest font-bold block uppercase text-[#00f0ff]">TRUNG DANG</span>
+              <span className="text-xs font-mono tracking-widest text-slate-400 block -mt-1">PORTFOLIO</span>
             </div>
           </a>
 
-          <nav className="hidden md:flex items-center gap-8 font-mono text-xs tracking-widest">
+          <nav className="hidden md:flex items-center gap-8 font-mono text-sm tracking-widest">
             <a href="#about" className="text-slate-400 hover:text-[#00f0ff] transition-all relative group py-2">
               <span>01. INTRO</span>
               <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-[#00f0ff] group-hover:w-full transition-all duration-300"></span>
@@ -139,7 +139,7 @@ export default function App() {
           </nav>
 
           <div className="hidden md:block">
-            <a href="#contact" className="px-5 py-2 border border-[#00f0ff]/40 rounded hover:border-[#00f0ff] text-xs font-mono tracking-widest hover:bg-[#00f0ff]/10 transition-all duration-300 relative overflow-hidden group">
+            <a href="#contact" className="px-5 py-2 border border-[#00f0ff]/40 rounded hover:border-[#00f0ff] text-sm font-mono tracking-widest hover:bg-[#00f0ff]/10 transition-all duration-300 relative overflow-hidden group">
               <span className="relative z-10 text-[#00f0ff]">INITIATE CONNECT</span>
               <span className="absolute inset-0 bg-[#00f0ff]/10 -translate-x-full group-hover:translate-x-0 transition-transform duration-300"></span>
             </a>
@@ -158,12 +158,12 @@ export default function App() {
         </div>
 
         {mobileMenuOpen && (
-          <div className="md:hidden bg-[#0a0a0c] border-b border-[#00f0ff]/15 px-6 py-6 flex flex-col gap-6 font-mono text-sm tracking-widest">
+          <div className="md:hidden bg-[#0a0a0c] border-b border-[#00f0ff]/15 px-6 py-6 flex flex-col gap-6 font-mono text-base tracking-widest">
             <a href="#about" onClick={() => setMobileMenuOpen(false)} className="text-slate-300 hover:text-[#00f0ff] transition-all">// 01. INTRO</a>
             <a href="#projects" onClick={() => setMobileMenuOpen(false)} className="text-slate-300 hover:text-[#00f0ff] transition-all">// 02. PROJECTS</a>
             <a href="#skills" onClick={() => setMobileMenuOpen(false)} className="text-slate-300 hover:text-[#00f0ff] transition-all">// 03. MATRIX</a>
             <a href="#contact" onClick={() => setMobileMenuOpen(false)} className="text-slate-300 hover:text-[#00f0ff] transition-all">// 04. COMMS</a>
-            <a href="#contact" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-center border border-[#00f0ff]/50 rounded text-xs text-[#00f0ff] bg-[#00f0ff]/5">INITIATE CONNECT</a>
+            <a href="#contact" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-center border border-[#00f0ff]/50 rounded text-sm text-[#00f0ff] bg-[#00f0ff]/5">INITIATE CONNECT</a>
           </div>
         )}
       </header>
@@ -190,8 +190,8 @@ export default function App() {
       <footer className="border-t border-[#00f0ff]/10 py-10 bg-[#070709] relative z-30">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="text-center md:text-left">
-            <p className="font-mono text-xs tracking-widest text-[#00f0ff]">&copy; 2026 CYBERNETIC ARCHIVE. ALL SYSTEMS OPERATIONAL.</p>
-            <p className="text-[10px] text-slate-500 mt-1 uppercase tracking-wider font-mono">Designed for high-performance creative agency standards</p>
+            <p className="font-mono text-sm tracking-widest text-[#00f0ff]">&copy; 2026 CYBERNETIC ARCHIVE. ALL SYSTEMS OPERATIONAL.</p>
+            <p className="text-xs text-slate-500 mt-1 uppercase tracking-wider font-mono">Designed for high-performance creative agency standards</p>
           </div>
           <div className="flex gap-4">
             <a href="https://github.com/trungdang23" target="_blank" rel="noopener noreferrer" className="w-10 h-10 border border-slate-800 rounded flex items-center justify-center hover:border-[#00f0ff] text-slate-400 hover:text-[#00f0ff] transition-all duration-300">
@@ -331,24 +331,24 @@ function HeroSection({ threeLoaded }) {
 
         <div className="lg:col-span-7 flex flex-col justify-center space-y-6 text-left pointer-events-auto">
 
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl xl:text-8xl font-black uppercase tracking-tight leading-none text-white">
+          <h1 className="text-5xl sm:text-7xl lg:text-8xl xl:text-9xl font-black uppercase tracking-tight leading-none text-white">
             CRAFTING <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00f0ff] via-[#bd00ff] to-[#ff00a0]">DIMENSIONAL</span> NARRATIVES
           </h1>
 
-          <p className="text-slate-400 text-lg sm:text-xl max-w-xl font-light">
+          <p className="text-slate-400 text-xl sm:text-2xl max-w-xl font-light">
             Expert Video Editor & 3D Designer weaving cinematic footage, generative graphics, and high-performance WebGL to accelerate conversions for global tier-one brands.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 pt-4 font-mono">
             <a
               href="#projects"
-              className="px-8 py-4 bg-gradient-to-r from-[#00f0ff] to-[#bd00ff] text-black font-black uppercase tracking-widest text-xs rounded hover:opacity-90 transform hover:-translate-y-1 transition-all duration-300 shadow-lg shadow-[#00f0ff]/20 text-center"
+              className="px-8 py-4 bg-gradient-to-r from-[#00f0ff] to-[#bd00ff] text-black font-black uppercase tracking-widest text-sm rounded hover:opacity-90 transform hover:-translate-y-1 transition-all duration-300 shadow-lg shadow-[#00f0ff]/20 text-center"
             >
               ENTER UNIVERSE
             </a>
             <a
               href="#contact"
-              className="px-8 py-4 border border-[#00f0ff]/40 text-[#00f0ff] font-bold uppercase tracking-widest text-xs rounded hover:border-[#00f0ff] hover:bg-[#00f0ff]/5 transition-all duration-300 text-center"
+              className="px-8 py-4 border border-[#00f0ff]/40 text-[#00f0ff] font-bold uppercase tracking-widest text-sm rounded hover:border-[#00f0ff] hover:bg-[#00f0ff]/5 transition-all duration-300 text-center"
             >
               COMMUNICATION CHANNEL
             </a>
@@ -812,7 +812,7 @@ function AboutSection({ threeLoaded }) {
 
         <div className="lg:col-span-7 space-y-6">
 
-          <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tight text-white leading-tight">
+          <h2 className="text-4xl sm:text-6xl font-black uppercase tracking-tight text-white leading-tight">
             NARRATIVE MEETS MULTI-DIMENSIONAL TECH
           </h2>
 
@@ -829,16 +829,16 @@ function AboutSection({ threeLoaded }) {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
             <div className="bg-[#0e0e13] p-5 border-l-2 border-[#00f0ff] rounded">
-              <span className="text-[#00f0ff] block font-mono text-sm font-bold mb-2 uppercase tracking-wider">3D EXPERTISE</span>
-              <span className="text-slate-400 text-sm font-sans leading-relaxed">Hard-surface modeling, particle/dynamics rendering, dynamic web textures</span>
+              <span className="text-[#00f0ff] block font-mono text-base font-bold mb-2 uppercase tracking-wider">3D EXPERTISE</span>
+              <span className="text-slate-400 text-base font-sans leading-relaxed">Hard-surface modeling, particle/dynamics rendering, dynamic web textures</span>
             </div>
             <div className="bg-[#0e0e13] p-5 border-l-2 border-[#bd00ff] rounded">
-              <span className="text-[#bd00ff] block font-mono text-sm font-bold mb-2 uppercase tracking-wider">VIDEO PRODUCTION</span>
-              <span className="text-slate-400 text-sm font-sans leading-relaxed">Cinematic storyboarding, asset pacing, premium motion assets</span>
+              <span className="text-[#bd00ff] block font-mono text-base font-bold mb-2 uppercase tracking-wider">VIDEO PRODUCTION</span>
+              <span className="text-slate-400 text-base font-sans leading-relaxed">Cinematic storyboarding, asset pacing, premium motion assets</span>
             </div>
             <div className="bg-[#0e0e13] p-5 border-l-2 border-emerald-500 rounded">
-              <span className="text-emerald-500 block font-mono text-sm font-bold mb-2 uppercase tracking-wider">DEV DEPLOYMENT</span>
-              <span className="text-slate-400 text-sm font-sans leading-relaxed">Optimized bundles, shader modifications, real-time reactive WebGL loops</span>
+              <span className="text-emerald-500 block font-mono text-base font-bold mb-2 uppercase tracking-wider">DEV DEPLOYMENT</span>
+              <span className="text-slate-400 text-base font-sans leading-relaxed">Optimized bundles, shader modifications, real-time reactive WebGL loops</span>
             </div>
           </div>
         </div>
@@ -1216,7 +1216,7 @@ function ProjectsSection({ activeProject, setActiveProject, threeLoaded, carouse
 
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
-            <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tight text-white mt-2">CYLINDRICAL VIEWPORT</h2>
+            <h2 className="text-4xl sm:text-6xl font-black uppercase tracking-tight text-white mt-2">CYLINDRICAL VIEWPORT</h2>
           </div>
         </div>
 
@@ -1230,7 +1230,7 @@ function ProjectsSection({ activeProject, setActiveProject, threeLoaded, carouse
 
         </div>
 
-        <div className="max-w-md mx-auto grid grid-cols-4 gap-2 font-mono text-[10px]">
+        <div className="max-w-2xl mx-auto grid grid-cols-4 gap-4 font-mono text-sm">
           {PROJECTS_DATA.map((proj, idx) => {
             const isActive = carouselIndex === idx;
             return (
@@ -1239,10 +1239,10 @@ function ProjectsSection({ activeProject, setActiveProject, threeLoaded, carouse
                 onClick={() => {
                   setActiveProject(proj);
                 }}
-                className={`py-3 px-2 border rounded-lg transition-all duration-500 text-left uppercase flex flex-col justify-between h-20 ${isActive ? 'border-[#00f0ff] bg-[#00f0ff]/5 text-[#00f0ff]' : 'border-slate-800 text-slate-500 hover:text-white hover:border-slate-700'}`}
+                className={`py-4 px-4 border rounded-lg transition-all duration-500 text-left uppercase flex flex-col justify-between h-28 ${isActive ? 'border-[#00f0ff] bg-[#00f0ff]/5 text-[#00f0ff]' : 'border-slate-800 text-slate-500 hover:text-white hover:border-slate-700'}`}
               >
-                <span>0{idx + 1}.</span>
-                <span className="font-bold truncate tracking-tighter block mt-2 text-[9px]">{proj.title.split('-')[0]}</span>
+                <span className="text-base">0{idx + 1}.</span>
+                <span className="font-bold tracking-tighter block mt-2 text-sm">{proj.title.split('-')[0]}</span>
               </button>
             );
           })}
@@ -1288,10 +1288,10 @@ function SkillsSection({ hoveredSkill, setHoveredSkill }) {
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
 
         <div className="lg:col-span-6 space-y-6">
-          <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tight text-white leading-none">
+          <h2 className="text-4xl sm:text-6xl font-black uppercase tracking-tight text-white leading-none">
             TECHNICAL CAPABILITIES MATRIX
           </h2>
-          <p className="text-slate-400 font-sans text-sm leading-relaxed">
+          <p className="text-slate-400 font-sans text-base leading-relaxed">
             Spider diagram displaying the balance of my technical skills. Hover over each skill node on the radar chart or the list items to view detailed breakdowns.
           </p>
 
@@ -1305,9 +1305,9 @@ function SkillsSection({ hoveredSkill, setHoveredSkill }) {
               >
                 <div className="flex items-center gap-3 mb-2">
                   <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: sk.color }}></span>
-                  <span className="font-mono text-xs uppercase tracking-widest font-bold text-slate-200">{sk.name}</span>
+                  <span className="font-mono text-sm uppercase tracking-widest font-bold text-slate-200">{sk.name}</span>
                 </div>
-                <div className="font-mono text-[10px] font-bold" style={{ color: sk.color }}>
+                <div className="font-mono text-xs font-bold" style={{ color: sk.color }}>
                   OPERATIONAL
                 </div>
               </div>
@@ -1424,10 +1424,10 @@ function ContactSection({ formStatus, setFormStatus }) {
 
           <div className="md:col-span-5 p-8 border-b md:border-b-0 md:border-r border-slate-900 flex flex-col justify-between space-y-8 font-mono">
             <div className="space-y-4">
-                            <h3 className="text-2xl font-black tracking-tighter text-white">INITIATE TRANSACTION</h3>
+                            <h3 className="text-3xl font-black tracking-tighter text-white">INITIATE TRANSACTION</h3>
                           </div>
 
-            <div className="space-y-3 text-[11px] text-slate-400">
+            <div className="space-y-3 text-xs text-slate-400">
               <div>
                 <span className="text-slate-500 block uppercase font-bold">CONTACT SUBJECT</span>
                 <span className="text-white">TRUNG DANG</span>
@@ -1443,29 +1443,29 @@ function ContactSection({ formStatus, setFormStatus }) {
             <form onSubmit={handleSubmit} className="space-y-5">
 
               <div>
-                <label className="block font-mono text-[9px] uppercase tracking-widest text-slate-500 mb-1.5 font-bold">PARTNER / CLIENT NAME</label>
+                <label className="block font-mono text-xs uppercase tracking-widest text-slate-500 mb-1.5 font-bold">PARTNER / CLIENT NAME</label>
                 <input
                   type="text"
                   name="name"
                   required
                   placeholder="e.g. Aura Group Media"
-                  className="w-full bg-[#070709] border border-slate-800 focus:border-[#00f0ff] rounded p-3 text-xs tracking-wider outline-none text-slate-100 placeholder:text-slate-700 transition-all font-mono"
+                  className="w-full bg-[#070709] border border-slate-800 focus:border-[#00f0ff] rounded p-3 text-sm tracking-wider outline-none text-slate-100 placeholder:text-slate-700 transition-all font-mono"
                 />
               </div>
 
               <div>
-                <label className="block font-mono text-[9px] uppercase tracking-widest text-slate-500 mb-1.5 font-bold">CONTACT LINE (EMAIL)</label>
+                <label className="block font-mono text-xs uppercase tracking-widest text-slate-500 mb-1.5 font-bold">CONTACT LINE (EMAIL)</label>
                 <input
                   type="email"
                   name="email"
                   required
                   placeholder="client@aura-group.com"
-                  className="w-full bg-[#070709] border border-slate-800 focus:border-[#00f0ff] rounded p-3 text-xs tracking-wider outline-none text-slate-100 placeholder:text-slate-700 transition-all font-mono"
+                  className="w-full bg-[#070709] border border-slate-800 focus:border-[#00f0ff] rounded p-3 text-sm tracking-wider outline-none text-slate-100 placeholder:text-slate-700 transition-all font-mono"
                 />
               </div>
 
               <div>
-                <label className="block font-mono text-[9px] uppercase tracking-widest text-slate-500 mb-1.5 font-bold">TRANSMITTED MESSAGE</label>
+                <label className="block font-mono text-xs uppercase tracking-widest text-slate-500 mb-1.5 font-bold">TRANSMITTED MESSAGE</label>
                 <textarea
                   name="message"
                   rows="4"
@@ -1478,14 +1478,14 @@ function ContactSection({ formStatus, setFormStatus }) {
               <button
                 type="submit"
                 disabled={formStatus.loading}
-                className="w-full py-4 bg-[#00f0ff]/10 hover:bg-[#00f0ff] hover:text-black border border-[#00f0ff]/40 hover:border-[#00f0ff] text-xs font-mono tracking-widest uppercase font-bold rounded transition-all duration-300 flex items-center justify-center gap-2 group cursor-pointer disabled:opacity-50"
+                className="w-full py-4 bg-[#00f0ff]/10 hover:bg-[#00f0ff] hover:text-black border border-[#00f0ff]/40 hover:border-[#00f0ff] text-sm font-mono tracking-widest uppercase font-bold rounded transition-all duration-300 flex items-center justify-center gap-2 group cursor-pointer disabled:opacity-50"
               >
                 <span>{formStatus.loading ? "TRANSMITTING..." : "TRANSMIT DATA PACKET"}</span>
                 <Send className="w-3.5 h-3.5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
               </button>
 
               {formStatus.message && (
-                <div className={`p-4 border rounded font-mono text-[10px] flex items-center gap-3 ${formStatus.message.includes('ERROR') ? 'border-amber-500/20 bg-amber-500/5 text-amber-500' : 'border-[#00f0ff]/20 bg-[#00f0ff]/5 text-[#00f0ff]'}`}>
+                <div className={`p-4 border rounded font-mono text-xs flex items-center gap-3 ${formStatus.message.includes('ERROR') ? 'border-amber-500/20 bg-amber-500/5 text-amber-500' : 'border-[#00f0ff]/20 bg-[#00f0ff]/5 text-[#00f0ff]'}`}>
                   <CheckCircle className="w-4 h-4 shrink-0" />
                   <span>{formStatus.message}</span>
                 </div>
@@ -1517,9 +1517,9 @@ function ProjectLightbox({ project, onClose }) {
       <div className="bg-[#0e0e13] border border-[#00f0ff]/30 rounded-xl max-w-4xl w-full overflow-hidden relative z-10 flex flex-col max-h-[90vh]">
 
         <div className="border-b border-slate-800 px-6 py-4 flex justify-between items-center bg-[#0a0a0c]">
-          <div className="font-mono text-xs">
+          <div className="font-mono text-sm">
             <span className="text-[#00f0ff] uppercase block tracking-widest font-bold">// SIMULATOR VIEWPORT</span>
-            <span className="text-slate-500 text-[10px] uppercase block tracking-wider -mt-0.5">{project.client} &bull; {project.date}</span>
+            <span className="text-slate-500 text-xs uppercase block tracking-wider -mt-0.5">{project.client} &bull; {project.date}</span>
           </div>
           <button
             onClick={onClose}
@@ -1543,12 +1543,12 @@ function ProjectLightbox({ project, onClose }) {
 
         <div className="p-6 overflow-y-auto bg-[#0a0a0c] border-t border-slate-800 grid grid-cols-1 md:grid-cols-12 gap-6">
           <div className="md:col-span-8 space-y-4">
-            <h4 className="font-bold text-lg text-white uppercase tracking-tight">{project.title}</h4>
-            <p className="text-slate-400 text-xs font-sans leading-relaxed">{project.description}</p>
+            <h4 className="font-bold text-xl text-white uppercase tracking-tight">{project.title}</h4>
+            <p className="text-slate-400 text-sm font-sans leading-relaxed">{project.description}</p>
           </div>
 
-          <div className="md:col-span-4 border-l-0 md:border-l border-slate-800 pl-0 md:pl-6 space-y-3 font-mono text-[10px] text-slate-400">
-            <span className="text-[#00f0ff] block font-bold text-xs uppercase tracking-widest mb-1">// HARDWARE TELEMETRY</span>
+          <div className="md:col-span-4 border-l-0 md:border-l border-slate-800 pl-0 md:pl-6 space-y-3 font-mono text-xs text-slate-400">
+            <span className="text-[#00f0ff] block font-bold text-sm uppercase tracking-widest mb-1">// HARDWARE TELEMETRY</span>
             {Object.entries(project.techStats).map(([key, value]) => (
               <div key={key} className="flex justify-between border-b border-slate-900 pb-1.5 uppercase">
                 <span>{key}</span>
