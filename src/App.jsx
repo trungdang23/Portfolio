@@ -10,8 +10,6 @@ import {
   X,
   ExternalLink,
   Maximize2,
-  Volume2,
-  VolumeX,
   TrendingUp,
   Video,
   Box,
@@ -80,7 +78,6 @@ const PROJECTS_DATA = [
 export default function App() {
   const [threeLoaded, setThreeLoaded] = useState(false);
   const [activeProject, setActiveProject] = useState(null);
-  const [muted, setMuted] = useState(true);
   const [hoveredSkill, setHoveredSkill] = useState(null);
   const [formStatus, setFormStatus] = useState({ submitted: false, loading: false, message: "" });
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -108,14 +105,6 @@ export default function App() {
 
       <div className="fixed inset-0 pointer-events-none z-10 border-[12px] border-[#0a0a0c]"></div>
       <div className="fixed inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.03),rgba(0,255,0,0.01),rgba(0,0,255,0.03))] bg-[length:100%_4px,3px_100%] z-20"></div>
-
-      <button
-        onClick={() => setMuted(!muted)}
-        className="fixed bottom-6 right-6 z-50 bg-[#121217]/80 backdrop-blur-md border border-[#00f0ff]/30 text-[#00f0ff] p-3 rounded-full hover:bg-[#00f0ff] hover:text-black hover:scale-105 active:scale-95 transition-all duration-300 group flex items-center gap-2 text-xs uppercase tracking-widest"
-      >
-        <span>{muted ? "MUTE OFF" : "MUTE ON"}</span>
-        {muted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4 animate-bounce" />}
-      </button>
 
       <header className="fixed top-0 left-0 w-full z-40 bg-[#0a0a0c]/80 backdrop-blur-md border-b border-[#00f0ff]/10">
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
@@ -184,7 +173,6 @@ export default function App() {
       <ProjectsSection
         activeProject={activeProject}
         setActiveProject={setActiveProject}
-        muted={muted}
         threeLoaded={threeLoaded}
         carouselIndex={carouselIndex}
         setCarouselIndex={setCarouselIndex}
@@ -196,7 +184,6 @@ export default function App() {
         <ProjectLightbox
           project={activeProject}
           onClose={() => setActiveProject(null)}
-          muted={muted}
         />
       )}
 
@@ -665,7 +652,7 @@ function AboutSection({ threeLoaded }) {
   );
 }
 
-function ProjectsSection({ activeProject, setActiveProject, muted, threeLoaded, carouselIndex, setCarouselIndex }) {
+function ProjectsSection({ activeProject, setActiveProject, threeLoaded, carouselIndex, setCarouselIndex }) {
   const carouselContainerRef = useRef(null);
 
   useEffect(() => {
@@ -1244,7 +1231,7 @@ function ContactSection({ formStatus, setFormStatus }) {
   );
 }
 
-function ProjectLightbox({ project, onClose, muted }) {
+function ProjectLightbox({ project, onClose }) {
   const videoRef = useRef(null);
 
   useEffect(() => {
@@ -1279,7 +1266,6 @@ function ProjectLightbox({ project, onClose, muted }) {
             controls
             autoPlay
             loop
-            muted={muted}
             playsInline
             className="w-full h-full object-cover"
           />
