@@ -591,18 +591,18 @@ function AboutSection({ threeLoaded }) {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 pt-4 font-mono text-xs">
-            <div className="bg-[#0e0e13] p-4 border-l-2 border-[#00f0ff] rounded">
-              <span className="text-[#00f0ff] block font-bold mb-1">3D EXPERTISE</span>
-              <span className="text-slate-400">Hard-surface modeling, particle/dynamics rendering, dynamic web textures</span>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
+            <div className="bg-[#0e0e13] p-5 border-l-2 border-[#00f0ff] rounded">
+              <span className="text-[#00f0ff] block font-mono text-sm font-bold mb-2 uppercase tracking-wider">3D EXPERTISE</span>
+              <span className="text-slate-400 text-sm font-sans leading-relaxed">Hard-surface modeling, particle/dynamics rendering, dynamic web textures</span>
             </div>
-            <div className="bg-[#0e0e13] p-4 border-l-2 border-[#bd00ff] rounded">
-              <span className="text-[#bd00ff] block font-bold mb-1">VIDEO PRODUCTION</span>
-              <span className="text-slate-400">Cinematic storyboarding, asset pacing, premium motion assets</span>
+            <div className="bg-[#0e0e13] p-5 border-l-2 border-[#bd00ff] rounded">
+              <span className="text-[#bd00ff] block font-mono text-sm font-bold mb-2 uppercase tracking-wider">VIDEO PRODUCTION</span>
+              <span className="text-slate-400 text-sm font-sans leading-relaxed">Cinematic storyboarding, asset pacing, premium motion assets</span>
             </div>
-            <div className="bg-[#0e0e13] p-4 border-l-2 border-emerald-500 rounded col-span-2 md:col-span-1">
-              <span className="text-emerald-500 block font-bold mb-1">DEV DEPLOYMENT</span>
-              <span className="text-slate-400">Optimized bundles, shader modifications, real-time reactive WebGL loops</span>
+            <div className="bg-[#0e0e13] p-5 border-l-2 border-emerald-500 rounded">
+              <span className="text-emerald-500 block font-mono text-sm font-bold mb-2 uppercase tracking-wider">DEV DEPLOYMENT</span>
+              <span className="text-slate-400 text-sm font-sans leading-relaxed">Optimized bundles, shader modifications, real-time reactive WebGL loops</span>
             </div>
           </div>
         </div>
